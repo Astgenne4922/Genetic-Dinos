@@ -39,7 +39,7 @@ gen = 0
 
 
 def add_obstacle():
-    if random.random() < 0.15:
+    if random.random() < 0.20:
         return Bird(bird_sprites, random.randint(0, 2))
     else:
         return Cactus(cacti_sprites[random.randint(0, 2)])
@@ -139,9 +139,12 @@ def run(config_file):
     p = neat.Population(config)
     p.add_reporter(neat.StdOutReporter(True))
     p.add_reporter(neat.StatisticsReporter())
-    winner = p.run(train, 50)
+    winner = p.run(train, 500)
 
     print(f"\nBest genome:\n{winner}")
+
+    pg.quit()
+    quit()
 
 
 if __name__ == "__main__":

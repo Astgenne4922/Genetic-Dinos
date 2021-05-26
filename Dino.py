@@ -75,6 +75,7 @@ class Dino(pg.sprite.Sprite):
         return False
 
     def look(self, obstacles, obstacle_speed):
+        """
         closest = None
         closest_idx = -1
 
@@ -89,7 +90,7 @@ class Dino(pg.sprite.Sprite):
 
         if closest:
             # distance to obstacle
-            vision[0] = 10. / (closest.rect.left - self.rect.right)
+            vision[0] = 1. / (closest.rect.left - self.rect.right)
             # obstacle height
             vision[1] = closest.rect.height
             # obstacle width
@@ -109,7 +110,22 @@ class Dino(pg.sprite.Sprite):
             vision[6] = 0 if not second_closest else 1. / (
                     (closest.rect.left - self.rect.right) - second_closest.rect.left - self.rect.right)
         else:
-            vision = [0, 0, 0, 0, obstacle_speed, self.posY, 0]
+            vision = [0, 0, 0, 0, 0, self.posY, 0]
+
+        return vision
+        """
+        closest = None if len(obstacles) == 0 else obstacles.sprites()[0]
+
+        vision = [0 for _ in range(5)]
+        
+        if closest:
+            vision[0] = closest.rect.centerx - self.rect.centerx
+            vision[1] = closest.rect.top
+            vision[2] = closest.rect.width
+            vision[3] = 0 if isinstance(closest, Cactus) else 150
+            vision[4] = self.posY
+        else:
+            vision = [0, 0, 0, 0, self.posY]
 
         return vision
 
@@ -117,9 +133,9 @@ class Dino(pg.sprite.Sprite):
         decision_max = max(decision)
         decision_max_idx = decision.index(decision_max)
 
-        if decision_max < 0.7:
-            self.duck(False)
-            return
+        #if decision_max < 0.7:
+        #    self.duck(False)
+        #    return
 
         if decision_max_idx == 0:
             self.jump(False)
